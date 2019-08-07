@@ -1,0 +1,32 @@
+{
+  // 业务代码配置按需加载，此方式为全局加载
+  "presets": [
+    [
+      "@babel/preset-env", 
+      {
+        "targets": {
+          "chrome": "58",
+          "ie": "11"
+        },
+        "useBuiltIns": "usage",
+        "corejs": "2"
+      }
+    ],
+    // "@babel/preset-typescript",
+    "@babel/preset-react",
+  ],
+  
+  // 打包库文件按需加载
+  // "plugins": [
+  //   [
+  //     "@babel/plugin-transform-runtime",
+  //     {
+  //       "absoluteRuntime": false,
+  //       "corejs": 2,
+  //       "helpers": true,
+  //       "regenerator": true,
+  //       "useESModules": false
+  //     }
+  //   ]
+  // ]
+}
