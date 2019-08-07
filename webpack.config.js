@@ -1,34 +1,36 @@
-// 内置模块path
-const path = require('path')
-// html模板插件
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')  //CSS插件
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+const path = require('path');  // 内置模块path
+const HtmlWebpackPlugin = require('html-webpack-plugin');  // html模板插件
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');  // 打包前清空dist文件夹
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');  //CSS插件
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
-  optimization: { // 优化项
-    minimizer: [
-      new OptimizeCssAssetsWebpackPlugin()
-    ]
-  },
   mode: 'development', // 开发模式，生产模式production
   devtool: 'cheap-module-eval-source-map',  // production环境DevTool最佳实践：'cheap-module-source-map'
   entry: {
-    main: './src/index.js', // 入口
+    main: './src/index.js',
     // app: './src/index.js'  //打包多个文件
   },
   output: {
     filename: '[name].bundle.[hash:8].js', // 打包后文件名
     path: path.resolve(__dirname, 'dist'), // 打包后文件路径，绝对路径
-    // publicPath: 'http://sth.com/'  //index.html中引入的地址为 publicPath + filename
+    // publicPath: 'http://sth.com/'  // index.html中引入的地址为 publicPath + filename
   },
-  devServer: {   //不配置的情况默认为8080
-    port: 3000,
+  devServer: {   
+    port: 3011,  // 不配置的情况默认为8080
+    contentBase: path.join(__dirname, "dist"),  //需开启服务的地址 
+    open: true,  // 自动打开localhost:3000的地址
     progress: true,
-    contentBase: path.join(__dirname, "dist"),
     compress: true,
-    open: true
+    hot: true,  // 开启热模块更新
+    hotOnly: true  // 即使热模块开启失效，浏览器仍旧不刷新
+  },
+  // 优化项
+  optimization: { 
+    minimizer: [
+      new OptimizeCssAssetsWebpackPlugin()
+    ]
   },
   // 所有的webpack插件
   plugins: [
@@ -45,19 +47,22 @@ module.exports = {
     // new MiniCssExtractPlugin({
     // 	filename: 'main.css'
     // })
+    new webpack.HotModuleReplacementPlugin()
   ],
   module: {
     rules: [
       // loader 特点单一；字符串定义一个loader或对象（可传入参数options）; 多个loader使用数组 ; loader 顺序，默认从右向左执行
       {
         test: /\.css$/,
-        use: [{
-          loader: 'style-loader', // style-loader 把 css 插入到head标签中
-          options: {
-            insertAt: 'top' // style标签内样式放在最上面
-          }
-        },
+        use: [
+          {
+            loader: 'style-loader', // style-loader 把 css 插入到head标签中
+            options: {
+              insertAt: 'top' // style标签内样式放在最上面
+            }
+          },
           'css-loader', // css-loader 解析 @import 这个语法
+          'postcss-loader',
         ]
       },
       {
@@ -70,12 +75,17 @@ module.exports = {
         ]
       },
       {
-        test: /\.sass$/,
+        test: /\.s[ac]ss$/,
         use: [
-          MiniCssExtractPlugin.loader,
-          'postcss-loader',
-          'css-loader',
-          'sass-loader',
+          {
+            loader: "style-loader",
+            options: {
+              insertAt: "top" 
+            }
+          },
+          "css-loader", 
+          "sass-loader",
+          "postcss-loader",
         ]
       },
       {

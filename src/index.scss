@@ -1,0 +1,18 @@
+body {
+
+  div {
+    border: 10px solid red;
+
+
+    .imgMin {
+      width : 100px;
+      height: 100px;
+    }
+
+    .imgMax {
+      width : 100px;
+      height: 100px;
+      transform: translate(100px,100px);
+    }
+  }
+}
