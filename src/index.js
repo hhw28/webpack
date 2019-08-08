@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
-import ReactDom from 'react-dom';
+// import _ from 'lodash';
 
-class App extends Component {
-  render(){
-    const x = 'react';
-    return <div>hello world! {x}</div>
-  }
+function getComponent () {
+  return import(/* webpackChunkName:"lodash" */'lodash').then(() => {
+    let div = document.createElement('div')
+    div.innerHTML = _.join(['hello', 'world'], '**')
+    return div
+  })
 }
 
-ReactDom.render(
-  <App />, 
-  document.getElementById('root')
-)
+getComponent().then(element => {
+  document.body.appendChild(element)
+})

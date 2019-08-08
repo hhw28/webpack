@@ -15,6 +15,7 @@
     // "@babel/preset-typescript",
     "@babel/preset-react",
   ],
+  // "plugins": ["@babel/plugin-syntax-dynamic-import"]
   
   // 打包库文件按需加载
   // "plugins": [

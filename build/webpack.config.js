@@ -2,35 +2,25 @@ const path = require('path');  // 内置模块path
 const HtmlWebpackPlugin = require('html-webpack-plugin');  // html模板插件
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');  // 打包前清空dist文件夹
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');  //CSS插件
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
-const webpack = require('webpack');
+// const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  mode: 'development', // 开发模式，生产模式production
-  devtool: 'cheap-module-eval-source-map',  // production环境DevTool最佳实践：'cheap-module-source-map'
   entry: {
-    main: './src/index.js',
-    // app: './src/index.js'  //打包多个文件
+    main: './src/index.js'
   },
   output: {
     filename: '[name].bundle.[hash:8].js', // 打包后文件名
-    path: path.resolve(__dirname, 'dist'), // 打包后文件路径，绝对路径
+    path: path.resolve(__dirname, '../dist'), // 打包后文件路径，绝对路径
     // publicPath: 'http://sth.com/'  // index.html中引入的地址为 publicPath + filename
-  },
-  devServer: {   
-    port: 3011,  // 不配置的情况默认为8080
-    contentBase: path.join(__dirname, "dist"),  //需开启服务的地址 
-    open: true,  // 自动打开localhost:3000的地址
-    progress: true,
-    compress: true,
-    hot: true,  // 开启热模块更新
-    hotOnly: true  // 即使热模块开启失效，浏览器仍旧不刷新
   },
   // 优化项
   optimization: { 
-    minimizer: [
-      new OptimizeCssAssetsWebpackPlugin()
-    ]
+    // minimizer: [
+    //   new OptimizeCssAssetsWebpackPlugin()
+    // ]
+    splitChunks: {
+      chunks: 'all'
+    }
   },
   // 所有的webpack插件
   plugins: [
@@ -47,7 +37,6 @@ module.exports = {
     // new MiniCssExtractPlugin({
     // 	filename: 'main.css'
     // })
-    new webpack.HotModuleReplacementPlugin()
   ],
   module: {
     rules: [
