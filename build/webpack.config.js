@@ -19,7 +19,28 @@ module.exports = {
     //   new OptimizeCssAssetsWebpackPlugin()
     // ]
     splitChunks: {
-      chunks: 'all'
+      chunks: 'all',  // 当为async时，同步代码不被分割
+      minSize: 30000,  // 当库小于30000kb时，不被分割
+      maxSize: 0,  // 不常使用，当文件大于设定的值时，会被多次分割
+      minChunks: 1,  // 最少被一个文件引用时，才会被分割
+      maxAsyncRequests: 5,  // 最多只分割5个库
+      maxInitialRequests: 3,  // main.js中最多只分割3个库
+      automaticNameDelimiter: '~', // 分割后的文件名中间的连接符号
+      automaticNameMaxLength: 30,  // 分割后的文件名长度
+      name: true,
+      cacheGroups: {  // 缓存组，当有符合以下条件库，会被缓存到最后一起打包在同一个文件
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,   // 筛选条件，此处表示为是从node_modules中引入的库
+          priority: -10,  // 优先级，数值大优先级高，比如两个都符合的文件会被打包在优先级高的
+          filename: 'vendor.js'
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,  // 为true时，当这个文件中引入了别的库，而这个库之前已经被分割了，那么不会再继续分割，而是会引用之前被分割好的内容
+          filename: 'conmon.js'
+        }
+      }
     }
   },
   // 所有的webpack插件

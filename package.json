@@ -9,6 +9,7 @@
   "scripts": {
     "build": "webpack --config ./build/webpack.config.prod.js",
     "dev": "webpack-dev-server --config ./build/webpack.config.dev.js",
+    "dev-build": "webpack --config ./build/webpack.config.dev.js",
     "watch": "webpack --watch",
     "server": "node server.js"
   },
